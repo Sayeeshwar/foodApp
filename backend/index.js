@@ -86,20 +86,16 @@ const VerifyCallback = async (username, password, done) => {
   try {
     const user = await User.findOne({ email: username });
 
-    //console.log(user.password);
     if (!user) {
       console.log("no such user");
       return done(null, false);
-      // return res.redirect("/");
     }
     if (await bcrypt.compare(password, user.password)) {
       console.log("login success");
       return done(null, user);
-      // return res.redirect("/welcome");
     } else {
       console.log("wrong pw");
       return done(null, false);
-      // return res.redirect("/");
     }
   } catch (err) {
     done(err);
@@ -149,36 +145,22 @@ app.post(
 
 //logout
 app.get("/logout", (req, res, next) => {
-  console.log("Before user logged out");
-  console.log(req.user);
-  console.log(req.session);
-
   req.logout();
-  console.log("After user logged out");
-  console.log(req.user);
-  console.log(req.session);
-
   res.redirect("http://localhost:3000/");
 });
 
 app.get("/isLoggedin", (req, res) => {
   try {
     if (req.user) {
-      console.log("user=>", req.user, req.session, "json response with 1");
+      //console.log("user=>", req.user, req.session, "json response with 1");
 
       res.json({ isLoggedin: "1", user: req.user });
     } else {
-      console.log(
-        "user=>",
-        "doesnt exist",
-        "json response with 0, but req.user is",
-        req.user
-      );
       res.json({ isLoggedin: "0" });
     }
   } catch {
     console.log("catch block triggered json response with False");
-    res.json({ isLoggedin: "False" });
+    res.json({ isLoggedin: "0" });
   }
 });
 
