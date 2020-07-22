@@ -5,14 +5,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
 
-import Give from "./Give";
-import Get from "./Get";
 import socket from "./socketConfig";
+
+import System from "./System";
 import { gridLayer } from "leaflet";
 
 function Welcome(props) {
-  const [tab, setTab] = useState("get");
-
+  const [item, setItem] = useState("donations");
   return (
     <div>
       <Row>
@@ -41,7 +40,11 @@ function Welcome(props) {
               <Dropdown.Item href="http://localhost:5000/logout">
                 <p>Logout</p>
               </Dropdown.Item>
-              <Dropdown.Item href="/me">
+              <Dropdown.Item
+                onClick={() => {
+                  setItem("me");
+                }}
+              >
                 <p>Manage profile</p>
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -49,19 +52,7 @@ function Welcome(props) {
         </Col>
       </Row>
       <hr style={{ margin: 0 }} />
-      <Tabs
-        justify
-        onSelect={(key) => setTab(key)}
-        defaultActiveKey="get"
-        id="uncontrolled-tab-example"
-      >
-        <Tab eventKey="give" title="Give">
-          <Give key={tab} socket={socket} />
-        </Tab>
-        <Tab eventKey="get" title="Get">
-          <Get key={tab} socket={socket} />
-        </Tab>
-      </Tabs>
+      <System user={props.user} item={item} socket={props.socket} />
     </div>
   );
 }
