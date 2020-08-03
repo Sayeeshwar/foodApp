@@ -11,7 +11,7 @@ import System from "./System";
 import { gridLayer } from "leaflet";
 
 function Welcome(props) {
-  const [item, setItem] = useState("donations");
+  const [item, setItem] = useState("me");
   return (
     <div>
       <Row>
@@ -28,24 +28,46 @@ function Welcome(props) {
               variant="info"
               id="dropdown-basic"
             >
-              {props.user.firstName}
+              <img
+                style={{ height: 30, borderRadius: 15 }}
+                src="images/default.png"
+              ></img>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item>
+              <Dropdown.Item disabled>
+                {props.user.firstName}
                 <p style={{ color: "gray", fontSize: 12 }}>
                   {props.user.email}
                 </p>
               </Dropdown.Item>
-              <Dropdown.Item href="http://localhost:5000/logout">
-                <p>Logout</p>
-              </Dropdown.Item>
+              <Dropdown.Divider />
               <Dropdown.Item
                 onClick={() => {
                   setItem("me");
                 }}
               >
                 <p>Manage profile</p>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item
+                onClick={() => {
+                  setItem("donations");
+                }}
+              >
+                <p>Give and Get</p>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item
+                onClick={() => {
+                  setItem("chat");
+                }}
+              >
+                <p>Chat</p>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item href="http://localhost:5000/logout">
+                <p>Logout</p>
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

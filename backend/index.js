@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-
+const path = require("path");
+const multer = require("multer");
 const mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
@@ -19,6 +20,8 @@ const io = require("socket.io")(server);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false })); //to parse only form data and not json data from post requests
+
+app.use(express.static("./public"));
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect

@@ -12,7 +12,7 @@ function Me(props) {
         text={"white"}
         style={{
           width: "38%",
-          marginTop: 50,
+          marginTop: 30,
           marginLeft: "28%",
           height: "100%",
           textAlign: "left",
