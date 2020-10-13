@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import FoodItem from "./FoodItem";
 import GetMap from "./MapGet";
-
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -35,6 +34,7 @@ class Get extends Component {
   async getFood() {
     let response = await fetch("/getFood");
     let data = await response.json();
+    console.log(" heyyy donations ",data['donation'])
     this.setState({
       donations: data["donation"],
       ready: 1,
@@ -81,7 +81,7 @@ class Get extends Component {
             <Col md={4}>
               <div style={{ maxHeight: "70vh", overflow: "auto" }}>
                 {this.state.donations.map((donation) => (
-                  <FoodItem key={donation.id} props={donation} />
+                  <FoodItem key={donation._id} props={donation} />
                 ))}
               </div>
             </Col>

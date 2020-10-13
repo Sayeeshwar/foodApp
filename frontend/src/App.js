@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
-
 import "./App.css";
 import Welcome from "./Welcome";
 import Home from "./Home";

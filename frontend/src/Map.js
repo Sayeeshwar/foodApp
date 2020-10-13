@@ -16,8 +16,8 @@ class Map extends Component{
 
         this.map=L.map('map').setView([this.props.lat,this.props.long],17)
 
-        console.log("Map props: ",this.props.lat,this.props.long)
-        console.log("hi")
+        //console.log("Map props: ",this.props.lat,this.props.long)
+        //console.log("hi")
         
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -27,7 +27,7 @@ class Map extends Component{
                     zoomOffset: -1,
                     accessToken: 'pk.eyJ1Ijoic2F5ZWVzaHdhciIsImEiOiJja2FzYXA5NWowNWNmMnhwdHdzcTcyeGI3In0.H4Zo6XgboMYAM1-5md0ylw'
                 }).addTo(this.map);
-            console.log('hi1')
+            //console.log('hi1')
             L.circle([this.props.lat,this.props.long], {
                 color: 'red',
                 fillColor: '#f03',

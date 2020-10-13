@@ -1,28 +1,31 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const path = require("path");
-const multer = require("multer");
-const mongoose = require("mongoose");
 
-const bodyParser = require("body-parser");
+const express = require("express"); //stores reference to express module
+const app = express();//instantiates express object
+const cors = require("cors"); //imports cors module for cross origin requests
+const path = require("path"); //imports path to work with file paths and directories
+const multer = require("multer");//imports multer middleware for uploading files
+const mongoose = require("mongoose");//imports mongoose odm to use js to interact with mongodb
 
-const bcrypt = require("bcrypt");
+const bodyParser = require("body-parser");//used to extract body of request and expose it on req.body
 
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");//library module to hash passwords before storing
 
-const session = require("express-session");
+const passport = require("passport");//module to help authenticate requests through various "strategies"- in this app, users on login
+const LocalStrategy = require("passport-local").Strategy;//uses local method instead of e.g facebook login, to validate users
 
-const http = require("http");
-const server = http.createServer(app);
-const io = require("socket.io")(server);
+const session = require("express-session");//creates session middleware to create and work with sessions when users log in and out
 
-app.use(cors());
+const http = require("http"); //module for creating servers
+const server = http.createServer(app); //creates a server object using http module binding it to the express app object
+const io = require("socket.io")(server);//uses server created  and binds it with imported socket.io module to create io object for communication
+
+app.use(cors());//executes cors code before executing further code
 app.use(bodyParser.urlencoded({ extended: false })); //to parse only form data and not json data from post requests
 
-app.use(express.static("./public"));
+app.use(express.static("./public/images"));//sets the default folder path to access files
 
+
+//sets header attributes to allow cors requests
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -47,67 +50,81 @@ app.use(function (req, res, next) {
   next();
 });
 
-const MongoStore = require("connect-mongo")(session);
 
+//stores sessions inside MongoStore
+const MongoStore = require("connect-mongo")(session);
+//uses config details from .env file
 require("dotenv").config();
 
+
+//once socket io connects and socket disconnects
 io.on("connection", (socket) => {
   console.log("user connected", socket.id);
+  socket.on("newDonation",()=>{
+    console.log("New donation made!")
+    socket.broadcast.emit('newDonation',{msg:"hi"})
+  })
+  socket.on("message",(message)=>{
+    console.log("Incoming message: ",message)
+    io.emit('message',message)
+  })
   socket.on("disconnect", () => {
     console.log("user disconnected", socket.id);
   });
 });
 
-//DB schemas
+//import DB schemas into variables
 const User = require("./userSchema");
 const Donation = require("./donationSchema");
 
-//DB init
+//DB init and connects to local mongoDB
 mongoose.connect("mongodb://localhost/appDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
+const db = mongoose.connection; //uses db as cursor to mongoose DB connection 
+db.on("error", console.error.bind(console, "connection error: "));//error handling
+//on connecting, display success message
 db.once("open", () => {
   console.log("DB connected");
 });
 
-const sessionStore = new MongoStore({
-  mongooseConnection: db,
-  collection: "sessions",
+const sessionStore = new MongoStore({//creates MongoStore obj to store sessions in sessionStore
+  mongooseConnection: db,//database reference
+  collection: "sessions",//db collection to store sessions
 });
 
 //Passport config
 
 const customFields = {
-  usernameField: "email",
+  usernameField: "email",//uses username field called email
 };
 
+//takes 3 parameters - username , password and done function to handle the different outcomes
 const VerifyCallback = async (username, password, done) => {
   try {
-    const user = await User.findOne({ email: username });
+    const user = await User.findOne({ email: username }); //queries db to check if user already exists in system
 
     if (!user) {
       console.log("no such user");
-      return done(null, false);
+      return done(null, false);//if user doesn't exist, done function gets null and false to show that validation failed
     }
     if (await bcrypt.compare(password, user.password)) {
       console.log("login success");
-      return done(null, user);
+      return done(null, user);//if hashed pw and given pw match, done func. gets null and user data to show that validation is successful
     } else {
       console.log("wrong pw");
-      return done(null, false);
+      return done(null, false);//this condition shows that password is wrong since user exists but passwords don't match
     }
   } catch (err) {
-    done(err);
+    done(err);//err shown if any error occurs
   }
 };
 
-const strategy = new LocalStrategy(customFields, VerifyCallback);
+const strategy = new LocalStrategy(customFields, VerifyCallback);//localstrategy configured with customfields and the verification function given above
 
-passport.use(strategy);
+passport.use(strategy);//uses the strategy instantiated above
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -124,12 +141,12 @@ passport.deserializeUser(async (userId, done) => {
 
 app.use(
   session({
-    secret: process.env.SECRET,
+    secret: process.env.SECRET,//uses secret key from .env
     resave: false,
     saveUninitialized: true,
-    store: sessionStore,
+    store: sessionStore,//defines where to store
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 30,
+      maxAge: 1000 * 60 * 60 * 24 * 30,//expires after a month
     },
   })
 );
@@ -141,7 +158,7 @@ app.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/" }),
   (req, res) => {
-    console.log(req.session.passport.user);
+    console.log("logged in user is: ",req.session.passport.user);
     res.redirect("/welcome");
   }
 );
@@ -155,14 +172,11 @@ app.get("/logout", (req, res, next) => {
 app.get("/isLoggedin", (req, res) => {
   try {
     if (req.user) {
-      //console.log("user=>", req.user, req.session, "json response with 1");
-
       res.json({ isLoggedin: "1", user: req.user });
     } else {
       res.json({ isLoggedin: "0" });
     }
   } catch {
-    console.log("catch block triggered json response with False");
     res.json({ isLoggedin: "0" });
   }
 });
@@ -188,9 +202,9 @@ app.post("/signup", async (req, res) => {
       age: req.body.age,
     });
     const savedUser = await user.save();
-    console.log(savedUser);
+    console.log("New user: ",savedUser);
   } catch (error) {
-    console.log("Error: ", error);
+    console.log("Error in adding user: ", error);
   }
 
   return res.redirect("/welcome");
@@ -198,8 +212,10 @@ app.post("/signup", async (req, res) => {
 
 app.post("/add", async (req, res) => {
   try {
+    console.log("donation from: ",req.user.username)
     donation = new Donation({
       donorName: req.user.username,
+      donorPic:req.user.profile_pic,
       latLocation: req.body.lat,
       longLocation: req.body.longt,
       dishName: req.body.dishName,
@@ -208,13 +224,25 @@ app.post("/add", async (req, res) => {
       expiry: req.body.expiry,
       isDonorVerified: req.user.isDonorVerified,
       donorRating: req.user.donorRating,
+      isAvailable: true,
+      givenTo:"",
+      listOfUsersInterested:[]
     });
     const savedDonation = await donation.save();
-    console.log(savedDonation);
+    console.log("Donation of ",savedDonation.dishName," has been added");
   } catch (err) {
-    console.log(err);
+    console.log("Error adding donation to system: ",err);
   }
+  return res.redirect("/");
 });
+
+app.get("/getFood",async (req, res) => {
+  let donations = await Donation.find().sort({donationTime:-1})
+  return res.json({donation:donations})
+
+
+})
+
 
 server.listen(5000, () => {
   console.log("Server listening on port 5000");

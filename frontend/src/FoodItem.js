@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
 // import Button from 'react-bootstrap/Button'
 function FoodItem(props) {
   return (
@@ -7,16 +8,19 @@ function FoodItem(props) {
       <hr />
 
       <Card>
-        <Card.Header as="h4">{props.props.dish_name}</Card.Header>
-        <Card.Body>
+        <Card.Header as="h4">{props.props.dishName}</Card.Header>
+        <Card.Body as="div">
           <Card.Title>
-            <h5>Posted on: {props.props.date_created}</h5>{" "}
+            <h5>Posted on: {props.props.donationTime}</h5>{" "}
+            {console.log("time object: ",typeof(props.props.donationTime))}
           </Card.Title>
-          <Card.Text>
+          <Card.Text as="div">
+            <Container>
             <h6>Serves: {props.props.quantity}</h6>
-            <h6>Veg/Non-veg: {props.props.isVeg ? "Veg" : "Non-veg"}</h6>
-            <h6>Latitude{props.props.lat}</h6>
-            <h6>Longtitude{props.props.long}</h6>
+            <h6>{props.props.isVeg ? "Vegetarian" : "Non vegetarian"}</h6>
+            <h6>Latitude: {props.props.latLocation}</h6>
+            <h6>Longtitude: {props.props.longLocation}</h6>
+            </Container>
           </Card.Text>
         </Card.Body>
       </Card>

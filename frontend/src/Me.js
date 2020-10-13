@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import "./Me.css";
 function Me(props) {
+  //console.log(props.user.profile_pic)
   return (
     <div>
       <Card
@@ -19,11 +20,22 @@ function Me(props) {
         }}
         className="mb-2"
       >
-        <Card.Header>
-          <h2>{props.user.firstName}</h2>
+        <Card.Header as="div">
+          <Row>
+            <Col md={10}>
+              <img
+                alt=""
+                style={{ height: 40, borderRadius: 15 }}
+                src={props.user.profile_pic}
+              ></img>
+            </Col>
+            <Col md={2}>
+              <h2>{props.user.firstName}</h2>
+            </Col>
+          </Row>
         </Card.Header>
         <Card.Body>
-          <Card.Text>
+          <Card.Text as="div">
             <Form>
               <Form.Group as={Row}>
                 <Form.Label column sm="6">

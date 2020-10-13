@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
 
-import socket from "./socketConfig";
+//import socket from "./socketConfig";
 
 import System from "./System";
-import { gridLayer } from "leaflet";
 
 function Welcome(props) {
   const [item, setItem] = useState("me");
@@ -18,7 +15,7 @@ function Welcome(props) {
         <Col md={10}>
           <h1 style={{ textAlign: "left", marginLeft: 100 }}>Foodapp</h1>
         </Col>
-        <Col md={2}>
+        <Col md={2} style={{padding:0}}>
           <Dropdown>
             <Dropdown.Toggle
               style={{
@@ -29,8 +26,9 @@ function Welcome(props) {
               id="dropdown-basic"
             >
               <img
+                alt=""
                 style={{ height: 30, borderRadius: 15 }}
-                src="images/default.png"
+                src={props.user.profile_pic}
               ></img>
             </Dropdown.Toggle>
 

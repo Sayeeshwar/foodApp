@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   profile_pic: {
     type: String,
-    default: "",
+    default: "default.png",
   },
   donor_rating: {
     type: Number,

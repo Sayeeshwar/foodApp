@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 
-let endpoint = "http://localhost:5000";
+//let endpoint = "http://localhost:5000";
 
-let socket = io.connect(`${endpoint}`);
+//let socket = io.connect(`${endpoint}`);
 
-const Socket = () => {
+const Socket = (props) => {
   const [messages, setMessages] = useState(["Hello and welcome"]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     const getMessages = () => {
-      socket.on("message", (msg) => {
+      props.socket.on("message", (msg) => {
         setMessages([...messages, msg]);
       });
     };
@@ -24,7 +24,7 @@ const Socket = () => {
 
   const onClick = () => {
     if (message !== "") {
-      socket.emit("message", message);
+      props.socket.emit("message", message);
       setMessage("");
     } else {
       alert("Please add message");
@@ -35,7 +35,7 @@ const Socket = () => {
     <div>
       {messages.length > 0 &&
         messages.map((msg) => (
-          <div>
+          <div key={msg.length}>
             <p>{msg}</p>
           </div>
         ))}

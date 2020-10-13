@@ -28,9 +28,10 @@ class GetMap extends Component {
           "pk.eyJ1Ijoic2F5ZWVzaHdhciIsImEiOiJja2FzYXA5NWowNWNmMnhwdHdzcTcyeGI3In0.H4Zo6XgboMYAM1-5md0ylw",
       }
     ).addTo(this.map);
-
-    this.props.locations.map((dish) => {
-      L.circle([dish.lat, dish.long], {
+    console.log('locations received by mapget component: ',this.props.locations);
+    this.props.locations.forEach((dish) => {
+      //console.log(dish);
+      L.circle([dish.latLocation, dish.longLocation], {
         color: "red",
         fillColor: "#f03",
         fillOpacity: 0.5,
@@ -40,6 +41,7 @@ class GetMap extends Component {
   }
 
   render() {
+    
     return <Wrapper width="100%" height="70vh" id="getmap" />;
   }
 }

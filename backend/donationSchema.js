@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // node plugin for mongoose odm to make mongodb accessible via js
+//defining the collection of donations as a schema
 const donationSchema = new mongoose.Schema({
   donorName: {
     type: String,
@@ -12,6 +13,10 @@ const donationSchema = new mongoose.Schema({
     type: Number,
     default: 3,
     required: true,
+  },
+  donationTime:{
+    type: Date,
+    default:Date.now()
   },
   donorPic: {
     type: String,
@@ -56,5 +61,5 @@ const donationSchema = new mongoose.Schema({
     default: [],
   },
 });
-
+//export this file as mongoose model Donation
 module.exports = mongoose.model("Donation", donationSchema);
