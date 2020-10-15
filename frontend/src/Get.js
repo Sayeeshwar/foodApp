@@ -66,7 +66,8 @@ class Get extends Component {
         <br />
         <h3>Need food? Here are some delicious meals in your area!</h3>
         <br />
-        <br />
+        <p>Please contact the donors only if the food is still fresh</p>
+        
         <Container style={giveStyle}>
           <Row>
             <Col md={8} style={{ padding: 0 }}>
