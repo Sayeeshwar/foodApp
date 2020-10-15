@@ -22,7 +22,7 @@ const io = require("socket.io")(server);//uses server created  and binds it with
 app.use(cors());//executes cors code before executing further code
 app.use(bodyParser.urlencoded({ extended: false })); //to parse only form data and not json data from post requests
 
-app.use(express.static("./public/images"));//sets the default folder path to access files
+//app.use(express.static("./public/images"));//sets the default folder path to access files
 
 
 //sets header attributes to allow cors requests
