@@ -5,7 +5,7 @@ const cors = require("cors"); //imports cors module for cross origin requests
 const path = require("path"); //imports path to work with file paths and directories
 const multer = require("multer");//imports multer middleware for uploading files
 const mongoose = require("mongoose");//imports mongoose odm to use js to interact with mongodb
-
+const PORT = process.env.PORT || 5000;
 const bodyParser = require("body-parser");//used to extract body of request and expose it on req.body
 
 const bcrypt = require("bcrypt");//library module to hash passwords before storing
@@ -247,6 +247,6 @@ app.get("/getFood",async (req, res) => {
 if(process.env.NODE_ENV=="production"){
   app.use(express.static('./frontend/build'))
 }
-server.listen(5000 || process.env.PORT, () => {
-  console.log("Server listening on port 5000");
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
