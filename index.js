@@ -159,7 +159,7 @@ app.post(
   passport.authenticate("local", { failureRedirect: "/" }),
   (req, res) => {
     console.log("logged in user is: ",req.session.passport.user);
-    res.redirect("/welcome");
+    res.redirect("/");
   }
 );
 
@@ -207,7 +207,7 @@ app.post("/signup", async (req, res) => {
     console.log("Error in adding user: ", error);
   }
 
-  return res.redirect("/welcome");
+  return res.redirect("/");
 });
 
 app.post("/add", async (req, res) => {
