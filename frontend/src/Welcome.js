@@ -3,8 +3,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
 
-//import socket from "./socketConfig";
-
 import System from "./System";
 
 function Welcome(props) {
