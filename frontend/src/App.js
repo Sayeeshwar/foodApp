@@ -15,12 +15,13 @@ function App() {
 
   async function isAutho() {
     //get request to check if user is authorized
-    let response = await fetch("http://localhost:5000/isLoggedin", {
+    let response = await fetch("/isLoggedin", {
       method: "GET",
       credentials: "include",
     });
 
     let data = await response.json();
+    console.log("isloggedin, ",data)
     setisAuth(Number(data.isLoggedin));
     //console.log("isLoggedin", isAuth);
 

@@ -64,7 +64,10 @@ function Welcome(props) {
                 <p>Chat</p>
               </Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item href="http://localhost:5000/logout">
+              <Dropdown.Item onClick={async ()=>{
+                console.log('going to logout');
+                await fetch('/logout')
+              }} href="/logout">
                 <p>Logout</p>
               </Dropdown.Item>
             </Dropdown.Menu>
